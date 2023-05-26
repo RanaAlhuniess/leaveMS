@@ -19,7 +19,7 @@ return new class extends Migration
             $table->dateTime('dob');
             $table->string('gender');
             $table->dateTime('join_date');
-            $table->float('salary');
+            $table->decimal('salary', 10, 2);
             $table->timestamps();
         });
     }
