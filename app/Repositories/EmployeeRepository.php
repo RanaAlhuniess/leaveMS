@@ -7,14 +7,15 @@ use App\Models\User;
 use App\Repositories\Interfaces\EmployeeRepositoryInterface;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeRepository implements EmployeeRepositoryInterface
 {
 
-    public function getAll()
+    public function getAll(): LengthAwarePaginator
     {
-        return Employee::latest()->paginate(10);
+        return Employee::with(['user'])->latest()->paginate(10);
     }
 
     public function create($data)

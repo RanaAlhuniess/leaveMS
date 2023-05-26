@@ -12,6 +12,10 @@ class Employee extends Model
 
     protected $dates = ['dob', 'join_date', 'created_at', 'updated_at'];
     protected $fillable = ['user_id', 'first_name', 'last_name', 'gender', 'dob', 'join_date', 'salary'];
+    protected $casts = [
+        'dob' => 'datetime',
+        'join_date' => 'datetime',
+    ];
 
     public function user(): BelongsTo
     {

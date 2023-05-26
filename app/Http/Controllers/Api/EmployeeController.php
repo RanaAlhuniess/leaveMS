@@ -3,27 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Employee\StoreEmployeeRequest;
-use App\Http\Resources\Api\UserResource;
+use App\Http\Resources\Api\EmployeeResource;
 use App\Repositories\Interfaces\EmployeeRepositoryInterface;
-use App\Services\UserService;
-use Exception;
+use App\Traits\Pagination\PaginationTrait;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+
 
 class EmployeeController extends BaseController
 {
+    use PaginationTrait;
+
     private EmployeeRepositoryInterface $employeeRepository;
 
     public function __construct(EmployeeRepositoryInterface $employeeRepository)
     {
-//        $this->middleware('guest');
         $this->employeeRepository = $employeeRepository;
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
-
+        $employees = $this->employeeRepository->getAll();
+        $employees = $this->paginateCollection($employees, EmployeeResource::class);
+        return $this->respond($employees);
     }
 
     public function show()
@@ -31,7 +32,7 @@ class EmployeeController extends BaseController
 
     }
 
-    public function store(StoreEmployeeRequest $request)
+    public function store(StoreEmployeeRequest $request): JsonResponse
     {
         $data = $request->validated();
         $employee = $this->employeeRepository->create((object)$data);
