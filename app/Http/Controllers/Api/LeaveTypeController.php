@@ -28,8 +28,9 @@ class LeaveTypeController extends BaseController
         return $this->respond(LeaveTypeResource::collection($leaveTypes));
     }
 
-    public function show(LeaveType $leaveType): JsonResponse
+    public function show(int $id): JsonResponse
     {
+        $leaveType = $this->leaveTypeRepository->getById($id);
         return $this->respond(new LeaveTypeResource($leaveType));
     }
 
@@ -53,9 +54,9 @@ class LeaveTypeController extends BaseController
         $leaveType->save();
     }
 
-    public function delete(LeaveType $leaveType): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $leaveType->delete();
+        $this->leaveTypeRepository->delete($id);
         return $this->respond(null, 204);
     }
 }

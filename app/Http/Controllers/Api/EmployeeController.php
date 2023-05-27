@@ -46,7 +46,7 @@ class EmployeeController extends BaseController
 
     }
 
-    public function delete(Employee $employee): JsonResponse
+    public function destroy(Employee $employee): JsonResponse
     {
         $employee->delete();
         return $this->respond(null, 204);

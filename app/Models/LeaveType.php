@@ -10,4 +10,9 @@ class LeaveType extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    protected $fillable = [
+        'name',
+    ];
+    protected $dates = ['deleted_at', 'created_at', 'updated_at'];
+
 }

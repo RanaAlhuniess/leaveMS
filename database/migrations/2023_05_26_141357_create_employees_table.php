@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('gender');
             $table->dateTime('join_date');
             $table->decimal('salary', 10, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
