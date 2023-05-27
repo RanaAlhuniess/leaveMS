@@ -37,7 +37,7 @@ class EmployeeController extends BaseController
     {
         $data = $request->validated();
         $employee = $this->employeeRepository->create((object)$data);
-        return $this->respond($employee);
+        return $this->respond(new EmployeeResource($employee));
 
     }
 

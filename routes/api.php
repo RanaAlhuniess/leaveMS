@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\LeaveTypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,5 +20,8 @@ Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::resource('employees', EmployeeController::class);
+    Route::group(['prefix' => 'leaves', 'middleware' => 'scope:hr'], function () {
+        Route::resource('/types', LeaveTypeController::class);
+    });
 
 });
