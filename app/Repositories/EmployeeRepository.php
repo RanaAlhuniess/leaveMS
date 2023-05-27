@@ -44,4 +44,9 @@ class EmployeeRepository implements EmployeeRepositoryInterface
             throw $e;
         }
     }
+
+    public function updateBalance(Employee $employee, int $leaveTypeId, int $balance)
+    {
+        // TODO: Implement updateBalance() method.
+    }
 }

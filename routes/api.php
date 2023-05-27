@@ -23,5 +23,9 @@ Route::middleware('auth:api')->group(function () {
     Route::group(['prefix' => 'leaves', 'middleware' => 'scope:hr'], function () {
         Route::resource('/types', LeaveTypeController::class);
     });
+    Route::group(['prefix' => 'employees', 'middleware' => 'scope:hr'], function () {
+        Route::put('/{employee}/leave-balance', [EmployeeController::class, 'updateLeaveBalance'])->middleware('scope:hr');
+
+    });
 
 });

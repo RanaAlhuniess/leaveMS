@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Employee\EmployeeStoreRequest;
+use App\Http\Requests\Employee\EmployeeUpdateLeaveBalanceRequest;
 use App\Http\Resources\Api\EmployeeResource;
 use App\Models\Employee;
 use App\Repositories\Interfaces\EmployeeRepositoryInterface;
 use App\Traits\Pagination\PaginationTrait;
 use Illuminate\Http\JsonResponse;
-
+use Illuminate\Http\Request;
 
 class EmployeeController extends BaseController
 {
@@ -50,5 +51,14 @@ class EmployeeController extends BaseController
     {
         $employee->delete();
         return $this->respond(null, 204);
+    }
+
+    public function updateLeaveBalance(EmployeeUpdateLeaveBalanceRequest $request, Employee $employee): JsonResponse
+    {
+        $data = (object)$request->validated();
+        $leaveTypeId = $data->leave_type_id;
+        $balance = $data->balance;
+        $employee->leaveBalances()->syncWithoutDetaching([$leaveTypeId => ['balance' => $balance]]);
+        return $this->respond(['message' => 'Leave balance updated successfully']);
     }
 }
