@@ -4,10 +4,7 @@ namespace App\Repositories;
 
 use App\Models\LeaveType;
 use App\Repositories\Interfaces\LeaveTypeRepositoryInterface;
-use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 
 class LeaveTypeRepository implements LeaveTypeRepositoryInterface
 {
