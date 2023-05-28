@@ -31,4 +31,20 @@ class LeaveController extends BaseController
         $this->employeeService->createLeaveRequest($employee->id, $data);
         return response()->json(null, 201);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function approve(LeaveRequest $leaveRequest): JsonResponse
+    {
+        $this->employeeService->approveLeaveRequest($leaveRequest);
+        return response()->json(['message' => 'Leave request approved.']);
+    }
+
+    public function decline(LeaveRequest $leaveRequest): JsonResponse
+    {
+        $this->employeeService->declineLeaveRequest($leaveRequest);
+        return response()->json(['message' => 'Leave request declined.']);
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Employee;
+use App\Models\EmployeeLeaveBalance;
 use App\Models\User;
 use App\Repositories\Interfaces\EmployeeRepositoryInterface;
 use Carbon\Carbon;
@@ -48,5 +49,11 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     public function updateBalance(Employee $employee, int $leaveTypeId, int $balance)
     {
         // TODO: Implement updateBalance() method.
+    }
+
+    public function getEmployeeLeaveBalanceByType(int $employeeId, int $typeId)
+    {
+        return EmployeeLeaveBalance::where('leave_type_id', $typeId)
+            ->where('employee_id', $employeeId)->first();
     }
 }

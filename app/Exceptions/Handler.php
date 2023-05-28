@@ -3,9 +3,11 @@
 namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -44,15 +46,21 @@ class Handler extends ExceptionHandler
         });
     }
 
-//    public function render($request, Throwable $exception)
-//    {
-////        if ($request->wantsJson()) {
-////            return $this->handleApiException($request, $exception);
-////        }
-//        return parent::render($request, $exception);
-//    }
+    public function render($request, Throwable $exception)
+    {
+        //TODO: Improve handle ModelNotFoundException
+        if ($exception instanceof ModelNotFoundException) {
+            return response()->json([
+                'error' => 'Resource not found'
+            ], 404);
+        }
+        if ($request->wantsJson()) {
+            return $this->handleApiException($request, $exception);
+        }
+        return parent::render($request, $exception);
+    }
 
-    private function handleApiException(Request $request, Exception $exception)
+    private function handleApiException(Request $request, Exception $exception): JsonResponse
     {
         $exception = $this->prepareException($exception);
 
@@ -67,7 +75,6 @@ class Handler extends ExceptionHandler
         if ($exception instanceof ValidationException) {
             $exception = $this->convertValidationExceptionToResponse($exception, $request);
         }
-
         return $this->customApiResponse($exception);
     }
 
@@ -75,10 +82,11 @@ class Handler extends ExceptionHandler
     {
         if (method_exists($exception, 'getStatusCode')) {
             $statusCode = $exception->getStatusCode();
+        } else if (method_exists($exception, 'getCode')) {
+            $statusCode = $exception->getCode();
         } else {
             $statusCode = 500;
         }
-
         $response = [];
 
         switch ($statusCode) {
@@ -104,6 +112,7 @@ class Handler extends ExceptionHandler
         }
 
         if (config('app.debug') && $exception instanceof Exception) {
+            $response['message'] = $exception->getMessage();
             $response['trace'] = $exception->getTrace();
             $response['code'] = $exception->getCode();
         }

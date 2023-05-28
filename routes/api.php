@@ -22,8 +22,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::resource('employees', EmployeeController::class);
     Route::group(['prefix' => 'leaves'], function () {
-        Route::resource('/types', LeaveTypeController::class)->middleware('scope:hr');;
+        Route::resource('/types', LeaveTypeController::class)->middleware('scope:hr');
         Route::post('/requests', [LeaveController::class, 'store']);
+        Route::put('/{leaveRequest}/approve', [LeaveController::class, 'approve'])->middleware('scope:hr');
+        Route::put('/{leaveRequest}/decline', [LeaveController::class, 'decline'])->middleware('scope:hr');
+
     });
     Route::group(['prefix' => 'employees', 'middleware' => 'scope:hr'], function () {
         Route::put('/{employee}/leave-balance', [EmployeeController::class, 'updateLeaveBalance'])->middleware('scope:hr');
