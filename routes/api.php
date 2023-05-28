@@ -26,10 +26,10 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/requests', [LeaveController::class, 'store']);
         Route::put('/{leaveRequest}/approve', [LeaveController::class, 'approve'])->middleware('scope:hr');
         Route::put('/{leaveRequest}/decline', [LeaveController::class, 'decline'])->middleware('scope:hr');
-
     });
-    Route::group(['prefix' => 'employees', 'middleware' => 'scope:hr'], function () {
+    Route::group(['prefix' => 'employees'], function () {
         Route::put('/{employee}/leave-balance', [EmployeeController::class, 'updateLeaveBalance'])->middleware('scope:hr');
+        Route::get('/me/leave-requests', [LeaveController::class, 'getEmployeeLeaveRequests']);
 
     });
 
